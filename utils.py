@@ -1,7 +1,9 @@
 import types
+import unicodedata
+import re
+html_tag = re.compile(r"<[^>]*?>")
 
 def is_japanese(string):
-    import unicodedata
     for ch in string:
         name = unicodedata.name(ch) 
         if "CJK UNIFIED" in name \
@@ -51,3 +53,6 @@ def mecab_list(text):
                 word_class.append((word,wclass[0],wclass[1],wclass[2],wclass[6]))
         node = node.next
     return word_class
+
+def remove_html_tags(text):
+    return html_tag.sub("", text)
