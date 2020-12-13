@@ -1,16 +1,22 @@
 import types
 import unicodedata
 import re
+from time import perf_counter
+from collections.abc import Iterable
+
+
 html_tag = re.compile(r"<[^>]*?>")
 
-def is_japanese(string):
-    for ch in string:
-        name = unicodedata.name(ch) 
-        if "CJK UNIFIED" in name \
-        or "HIRAGANA" in name \
-        or "KATAKANA" in name:
-            return True
-    return False
+
+def time_func(func, args):
+    start = perf_counter()
+    if isinstance(args, Iterable):
+        func(*args)
+    else:
+        func(args)
+    end = perf_counter()
+    return end - start
+
 
 def explain(item, shows_private=False, shows_method=False):
     '''
@@ -37,6 +43,21 @@ def explain(item, shows_private=False, shows_method=False):
             continue
         print('{}:\t{}'.format(d, attr))
 
+
+def remove_html_tags(text):
+    return html_tag.sub("", text)
+
+
+def is_japanese(string):
+    for ch in string:
+        name = unicodedata.name(ch) 
+        if "CJK UNIFIED" in name \
+        or "HIRAGANA" in name \
+        or "KATAKANA" in name:
+            return True
+    return False
+
+
 #品詞と特徴のタプルのリストを返す
 def mecab_list(text):
     tagger = MeCab.Tagger("-Ochasen")
@@ -54,5 +75,9 @@ def mecab_list(text):
         node = node.next
     return word_class
 
-def remove_html_tags(text):
-    return html_tag.sub("", text)
+
+def load_csv(filename):
+    with open(filename) as fin:
+        reader = csv.reader(fin)
+        inputs = [l for l in reader]
+    return inputs
