@@ -3,6 +3,7 @@ import unicodedata
 import re
 from time import perf_counter
 from collections.abc import Iterable
+import csv
 
 
 html_tag = re.compile(r"<[^>]*?>")
