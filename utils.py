@@ -9,6 +9,9 @@ import csv
 html_tag = re.compile(r"<[^>]*?>")
 
 
+flatten = lambda x: [z for y in x for z in (flatten(y) if hasattr(y, '__iter__') and not isinstance(y, str) else (y,))]
+
+
 def time_func(func, args):
     start = perf_counter()
     if isinstance(args, Iterable):
