@@ -61,6 +61,11 @@ def is_japanese(string):
             return True
     return False
 
+def is_all_japanese(string):
+    ans = True
+    for ch in string:
+        ans &= is_japanese(ch)
+    return ans
 
 #品詞と特徴のタプルのリストを返す
 def mecab_list(text):
